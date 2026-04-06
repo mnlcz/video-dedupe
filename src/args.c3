@@ -1,37 +1,9 @@
 module video_dedupe::args;
 
-import libc;
 import std::io;
 import std::os;
 
 faultdef INVALID_ARGUMENT, INVALID_PATH, MISSING_ARGUMENTS, UNKNOWN_ARGUMENT;
-
-// -------------------------- C ABI -------------------------------
-// POSIX regex_t is an opaque struct — size varies by platform
-// on Linux x64 it's 40 bytes. I over-allocate for portability
-struct RegexT
-{
-	char[128] __opaque;
-}
-
-// match result — start and end offsets of each capture group
-struct Regmatch
-{
-	isz rm_so; // start offset
-	isz rm_eo; // end offset
-}
-
-const int REG_EXTENDED = 1; // use ERE syntax (like egrep)
-extern fn int regcomp(RegexT* preg, ZString pattern, int cflags);
-extern fn int regexec(
-	RegexT* preg,
-	ZString string,
-	usz nmatch,
-	Regmatch* pmatch,
-	int eflags
-);
-extern fn void regfree(RegexT* preg);
-// ----------------------------------------------------------------
 
 <*
  Validates if the argument is a path.
@@ -42,24 +14,20 @@ extern fn void regfree(RegexT* preg);
 *>
 fn Path? validate_arg(Allocator allocator, String s_path)
 {
-	RegexT re;
-	int err = regcomp(&re, `^/[^/]+(/[^/]+)*$`, REG_EXTENDED);
-	if (err != 0)
-	{
-		io::eprintfn("Failed to compile regex");
-		std::os::exit(1);
-	}
-	defer regfree(&re);
+	if (s_path.len == 0) return INVALID_ARGUMENT~;
 
 	@pool()
 	{
-		ZString cstr_path = s_path.zstr_tcopy();
+		// Create mutable copy since `normalize` could segfault
+		String tmp = s_path.copy(tmem);
 
-		int result = regexec(&re, cstr_path, 0, null, 0);
-		if (result != 0) return INVALID_ARGUMENT~;
+		String? maybe_ok = path::normalize(tmp);
 
-		String matched = cstr_path.str_view().copy(allocator);
-		return { .path_string = matched, .allocator = allocator };
+		if (catch flt = maybe_ok) return INVALID_ARGUMENT~;
+
+		String final = maybe_ok.copy(allocator);
+
+		return { .path_string = final, .allocator = allocator };
 	};
 }
 
