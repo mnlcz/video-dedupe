@@ -1,0 +1,45 @@
+{
+  "langrev": "1",
+  "warnings": [],
+  "dependency-search-paths": [
+    "lib"
+  ],
+  "dependencies": [],
+  "authors": [
+    "MnLCz <mnlcz@tuta.io>"
+  ],
+  "version": "0.1.0",
+  "sources": [
+    "src/**"
+  ],
+  "test-sources": [
+    "test/**"
+  ],
+  "output": "build",
+  "cpu": "generic",
+  "safe": true,
+  "targets": {
+    "debug": {
+      "type": "executable",
+      "opt": "O0",
+      "debug-info": "full",
+      "strip-unused": false,
+      "single-module": false,
+      "trap-on-wrap": false,
+      "features": [
+        "DEBUG"
+      ]
+    },
+    "release": {
+      "type": "executable",
+      "opt": "O3",
+      "debug-info": "none",
+      "strip-unused": true,
+      "single-module": true,
+      "trap-on-wrap": true,
+      "features": [
+        "RELEASE"
+      ]
+    }
+  }
+}
