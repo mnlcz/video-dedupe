@@ -1,11 +1,11 @@
 test:
     c3c test debug
 
-rrelease:
-    c3c run release
+rrelease PATH:
+    c3c run release -- "{{PATH}}"
 
-rdebug:
-    c3c run debug
+rdebug PATH:
+    c3c run debug -- "{{PATH}}"
 
 [default]
 bdebug:
@@ -14,5 +14,5 @@ bdebug:
 brelease:
     c3c build release
 
-alias r := brelease
-alias d := bdebug
+alias br := brelease
+alias r := rdebug
