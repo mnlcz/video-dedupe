@@ -19,7 +19,9 @@
   "cpu": "generic",
   "safe": true,
   "linked-libraries": [
-    "avcodec"
+    "avformat",
+    "avcodec",
+    "avutil"
   ],
   "targets": {
     "debug": {
