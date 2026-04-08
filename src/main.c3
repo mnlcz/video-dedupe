@@ -3,6 +3,7 @@ module video_dedupe;
 import std::io;
 import std::os;
 import video_dedupe::cli;
+import video_dedupe::fs;
 
 fn int main(String[] args)
 {
@@ -34,7 +35,7 @@ fn int main(String[] args)
 	// Small test
 	@pool()
 	{
-		PathList pl = path::ls(tmem, path)!!;
+		PathList pl = fs::tlist_dir(path);
 
 		foreach (p : pl)
 		{
