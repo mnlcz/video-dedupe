@@ -18,6 +18,9 @@
   "output": "build",
   "cpu": "generic",
   "safe": true,
+  "linked-libraries": [
+    "avcodec"
+  ],
   "targets": {
     "debug": {
       "type": "executable",

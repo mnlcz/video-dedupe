@@ -19,8 +19,12 @@ Maybe also:
 
 ## TODO
 
-- [ ] Skeleton: argument parsing. Very early fs integration.
+- [x] Skeleton: argument parsing. Very early fs integration.
   - [ ] Restrict argument path to directories only. Add an extra validator in `parse_args` and a new fault, something like `NOT_A_DIRECTORY`.
   - [x] Move `args.c3` to a dedicated `cli/` directory.
   - [ ] Consider adding flags, current logic should go in something like `video_dedupe --scan <dirpath>`. But I could also allow `video_dedupe --compare <a> <b>`.
-- [-] Decoder + sampler: extract frames at fixed intervals.
+  - [ ] Make `is_video_file` ignore directories.
+- [ ] Decoder + sampler: extract frames at fixed intervals.
+  - [ ] Bindings for ffmpeg. (`src/core/decode/ffmpeg_bindings.c3`).
+  - [ ] Easy wrapper over bindings. (`src/core/decode/ffmpeg.c3`).
+  - [ ] Decoder api. (`src/core/decode/decoder.c3`).
