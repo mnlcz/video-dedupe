@@ -39,7 +39,8 @@ fn int main(String[] args)
 
 		foreach (p : pl)
 		{
-			io::printn(p.path_string);
+			bool iv = fs::is_video_file(p);
+			io::printfn("'%s' is video: %s", p, iv ? "true" : "false");
 		}
 	};
 
