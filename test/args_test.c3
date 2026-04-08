@@ -1,6 +1,6 @@
 module video_dedupe::tests::args;
 
-import video_dedupe::args;
+import video_dedupe::cli::args;
 import std::core::test;
 import std::io;
 

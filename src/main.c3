@@ -2,7 +2,7 @@ module video_dedupe;
 
 import std::io;
 import std::os;
-import video_dedupe::args;
+import video_dedupe::cli::args;
 
 fn int main(String[] args)
 {

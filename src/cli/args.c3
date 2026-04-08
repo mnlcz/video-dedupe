@@ -1,4 +1,4 @@
-module video_dedupe::args;
+module video_dedupe::cli::args;
 
 import std::io;
 import std::os;
