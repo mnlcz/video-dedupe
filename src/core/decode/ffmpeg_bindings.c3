@@ -8,7 +8,15 @@ alias AVFrame = void; // a decoded frame
 // avformat types
 alias AVFormatContext = void; // the open file/container
 alias AVStream = void; // one stream inside a container (video, audio...)
-alias AVPacket = void; // a compressed chunk of data, pre-decode
+struct AVPacket
+{
+	void* buf;
+	long pts;
+	long dts;
+	char* data;
+	int size;
+	int stream_index;
+}
 
 // avcodec types
 alias AVCodec = void;
