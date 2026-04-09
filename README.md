@@ -31,3 +31,4 @@ Maybe also:
     - [ ] `av_frame_alloc`.
     - [ ] `av_frame_free`.
   - [ ] Decoder api. (`src/core/decode/decoder.c3`).
+  - [ ] Maybe make wrappers and bindings `@private`, making `decoder.c3` the only visible api.
