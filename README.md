@@ -25,6 +25,9 @@ Maybe also:
   - [ ] Consider adding flags, current logic should go in something like `video_dedupe --scan <dirpath>`. But I could also allow `video_dedupe --compare <a> <b>`.
   - [ ] Make `is_video_file` ignore directories.
 - [ ] Decoder + sampler: extract frames at fixed intervals.
-  - [ ] Bindings for ffmpeg. (`src/core/decode/ffmpeg_bindings.c3`).
+  - [x] Bindings for ffmpeg. (`src/core/decode/ffmpeg_bindings.c3`).
   - [ ] Easy wrapper over bindings. (`src/core/decode/ffmpeg.c3`).
+    - [ ] `av_read_frame`.
+    - [ ] `av_frame_alloc`.
+    - [ ] `av_frame_free`.
   - [ ] Decoder api. (`src/core/decode/decoder.c3`).
