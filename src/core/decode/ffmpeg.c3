@@ -1,6 +1,6 @@
 module video_dedupe::core::decode;
 
-faultdef OPEN_FAILED, STREAM_INFO_FAILED, STREAM_END, DECODE_FAILED;
+faultdef ALLOC_FAILED, DECODE_FAILED, OPEN_FAILED, STREAM_INFO_FAILED, STREAM_END;
 
 const int AVMEDIA_TYPE_VIDEO = 0;
 const int AVMEDIA_TYPE_AUDIO = 1;
@@ -96,4 +96,46 @@ fn AVFrame*? next_frame(
 
 		if (ret < 0) return DECODE_FAILED~;
 	}
+}
+
+<*
+ Tries to allocate an empty AVFrame instance.
+ @return "A valid pointer to AVFrame, ready to be used."
+ @return ? ALLOC_FAILED : "The allocation failed."
+*>
+fn AVFrame*? frame_alloc()
+{
+	AVFrame* frame = av_frame_alloc();
+	if (frame == null) return ALLOC_FAILED~;
+	return frame;
+}
+
+<*
+ Frees the resources used by the frame. The function is safe and cannot fail.
+ @param frame : `Frame to free.`
+*>
+fn void frame_free(AVFrame* frame)
+{
+	av_frame_free(&frame);
+}
+
+<*
+ Tries to allocate a packet.
+ @return "A valid pointer to AVPacket."
+ @return ? ALLOC_FAILED : "The allocation failed."
+*>
+fn AVPacket*? packet_alloc()
+{
+	AVPacket* pkt = av_packet_alloc();
+	if (pkt == null) return ALLOC_FAILED~;
+	return pkt;
+}
+
+<*
+ Frees the resources used by the packet. The function is safe and cannot fail.
+ @param pkt : `Packet to free.`
+*>
+fn void packet_free(AVPacket* pkt)
+{
+	av_packet_free(&pkt);
 }

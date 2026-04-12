@@ -27,8 +27,13 @@ Maybe also:
 - [ ] Decoder + sampler: extract frames at fixed intervals.
   - [x] Bindings for ffmpeg. (`src/core/decode/ffmpeg_bindings.c3`).
   - [ ] Easy wrapper over bindings. (`src/core/decode/ffmpeg.c3`).
-    - [ ] `av_read_frame`.
-    - [ ] `av_frame_alloc`.
-    - [ ] `av_frame_free`.
+    - ~[ ] `av_read_frame`~.
+    - [x] `av_frame_alloc`.
+    - [x] `av_frame_free`.
+    - [ ] `av_find_best_stream`.
+    - [ ] `av_find_decoder`.
+    - [ ] `avcodec_alloc_context3`.
+    - [ ] `avcodec_parameters_to_context`.
+    - [ ] `avcodec_open2`.
   - [ ] Decoder api. (`src/core/decode/decoder.c3`).
   - [ ] Maybe make wrappers and bindings `@private`, making `decoder.c3` the only visible api.
