@@ -1,6 +1,6 @@
 module video_dedupe::core::decode;
 
-faultdef ALLOC_FAILED, DECODE_FAILED, OPEN_FAILED, STREAM_INFO_FAILED, STREAM_END;
+faultdef ALLOC_FAILED, CODEC_NOT_FOUND, CODEC_OPEN_FAILED, CODEC_PARAMS_FAILED, DECODE_FAILED, DECODER_NOT_FOUND, OPEN_FAILED, STREAM_INFO_FAILED, STREAM_NOT_FOUND, STREAM_END;
 
 const int AVMEDIA_TYPE_VIDEO = 0;
 const int AVMEDIA_TYPE_AUDIO = 1;
@@ -138,4 +138,45 @@ fn AVPacket*? packet_alloc()
 fn void packet_free(AVPacket* pkt)
 {
 	av_packet_free(&pkt);
+}
+
+<*
+ Takes an open container and produces an initialized context.
+ @param fmt_ctx : `Pointer to the open container open_input produced.`
+ @param video_stream_index : `Video index produced by find_video_stream.`
+ @return "AVCodecContext instance ready to receive packets."
+ @return ? CODEC_NOT_FOUND : `avcodec_find_decoder failed.`
+ @return ? ALLOC_FAILED : `avcodec_alloc_context3 returned null, it was unable to allocate.`
+ @return ? CODEC_PARAMS_FAILED : `avcodec_parameters_to_context returnet negative. E.g. the parameters got malformed or are incompatible.`
+ @return ? CODEC_OPEN_FAILED : `avcodec_open2 returned negative. E.g. missing hardware support or invalid configuration.`
+*>
+fn AVCodecContext*? open_decoder(
+	AVFormatContext* fmt_ctx,
+	int video_stream_index
+)
+{
+	// avcodec_find_decoder -> avcodec_alloc_context3 -> avcodec_parameters_to_context -> avcodec_open2
+	return null;
+}
+
+<*
+ Frees the resources associated with a codec context. The function cannot fail.
+ @param codec_ctx : `Pointer to the codec context.`
+*>
+fn void close_decoder(AVCodecContext* codec_ctx)
+{
+	// avcodec_free_context
+}
+
+<*
+ Finds which stream index corresponds to video.
+ @param fmt_ctx : `The opened media file.`
+ @return "Video stream index."
+ @return ? STREAM_NOT_FOUND
+ @return ? DECODER_NOT_FOUND
+*>
+fn int? find_video_stream(AVFormatContext* fmt_ctx)
+{
+	// av_find_best_stream
+	return -1;
 }
