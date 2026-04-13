@@ -6,8 +6,24 @@ alias AVDictionary = void;
 alias AVFrame = void; // a decoded frame
 
 // avformat types
-alias AVFormatContext = void; // the open file/container
-alias AVStream = void; // one stream inside a container (video, audio...)
+struct AVStream
+{
+	void* av_class;
+	int index;
+	int id;
+	AVCodecParameters* codecpar;
+}
+struct AVFormatContext
+{
+	void* av_class;
+	void* iformat;
+	void* oformat;
+	void* priv_data;
+	void* pb;
+	int ctx_flags;
+	uint nb_streams;
+	AVStream** streams;
+}
 struct AVPacket
 {
 	void* buf;
@@ -21,7 +37,11 @@ struct AVPacket
 // avcodec types
 alias AVCodec = void;
 alias AVCodecContext = void; // decoder state for one stream
-alias AVCodecParameters = void;
+struct AVCodecParameters
+{
+	int codec_type;
+	int codec_id;
+}
 
 // avformat functions
 extern fn int avformat_open_input(
