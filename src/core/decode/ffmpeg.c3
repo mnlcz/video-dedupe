@@ -155,8 +155,25 @@ fn AVCodecContext*? open_decoder(
 	int video_stream_index
 )
 {
-	// avcodec_find_decoder -> avcodec_alloc_context3 -> avcodec_parameters_to_context -> avcodec_open2
-	return null;
+	/* avcodec_find_decoder -> avcodec_alloc_context3 -> avcodec_parameters_to_context -> avcodec_open2 */
+	AVStream* stream = fmt_ctx.streams[video_stream_index];
+	int codec_id = stream.codecpar.codec_id;
+
+	AVCodec* codec = avcodec_find_decoder(codec_id);
+	if (!codec) return CODEC_NOT_FOUND~;
+
+	AVCodecContext* codec_ctx = avcodec_alloc_context3(codec);
+	if (!codec_ctx) return ALLOC_FAILED~;
+
+	defer catch avcodec_free_context(&codec_ctx);
+
+	int ret = avcodec_parameters_to_context(codec_ctx, stream.codecpar);
+	if (ret < 0) return CODEC_PARAMS_FAILED~;
+
+	ret = avcodec_open2(codec_ctx, codec, null);
+	if (ret < 0) return CODEC_OPEN_FAILED~;
+
+	return codec_ctx;
 }
 
 <*
