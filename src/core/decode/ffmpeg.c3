@@ -182,7 +182,8 @@ fn AVCodecContext*? open_decoder(
 *>
 fn void close_decoder(AVCodecContext* codec_ctx)
 {
-	// avcodec_free_context
+	if (!codec_ctx) return;
+	avcodec_free_context(&codec_ctx);
 }
 
 <*

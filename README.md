@@ -35,6 +35,6 @@ Maybe also:
     - [x] `avcodec_alloc_context3`.
     - [x] `avcodec_parameters_to_context`.
     - [x] `avcodec_open2`.
-    - [ ] `avcodec_free_context`.
+    - [x] `avcodec_free_context`.
   - [ ] Decoder api. (`src/core/decode/decoder.c3`).
   - [ ] Maybe make wrappers and bindings `@private`, making `decoder.c3` the only visible api.
