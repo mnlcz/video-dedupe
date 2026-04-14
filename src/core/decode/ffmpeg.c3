@@ -1,6 +1,6 @@
 module video_dedupe::core::decode;
 
-faultdef ALLOC_FAILED, CODEC_NOT_FOUND, CODEC_OPEN_FAILED, CODEC_PARAMS_FAILED, DECODE_FAILED, DECODER_NOT_FOUND, OPEN_FAILED, STREAM_INFO_FAILED, STREAM_NOT_FOUND, STREAM_END;
+faultdef ALLOC_FAILED, CODEC_NOT_FOUND, CODEC_OPEN_FAILED, CODEC_PARAMS_FAILED, DECODE_FAILED, OPEN_FAILED, STREAM_INFO_FAILED, STREAM_NOT_FOUND, STREAM_END;
 
 const int AVMEDIA_TYPE_VIDEO = 0;
 const int AVMEDIA_TYPE_AUDIO = 1;
@@ -19,6 +19,7 @@ fn AVFormatContext*? open_input(String path)
 	AVFormatContext* ctx = null;
 
 	if (avformat_open_input(&ctx, path, null, null) < 0) return OPEN_FAILED~;
+	if (!ctx) return OPEN_FAILED~;
 
 	if (avformat_find_stream_info(ctx, null) < 0)
 	{
@@ -35,7 +36,7 @@ fn AVFormatContext*? open_input(String path)
 *>
 fn void close_input(AVFormatContext* ctx)
 {
-	if (ctx == null) return;
+	if (!ctx) return;
 	avformat_close_input(&ctx);
 }
 
@@ -127,7 +128,7 @@ fn void frame_free(AVFrame* frame)
 fn AVPacket*? packet_alloc()
 {
 	AVPacket* pkt = av_packet_alloc();
-	if (pkt == null) return ALLOC_FAILED~;
+	if (!pkt) return ALLOC_FAILED~;
 	return pkt;
 }
 
@@ -191,10 +192,11 @@ fn void close_decoder(AVCodecContext* codec_ctx)
  @param fmt_ctx : `The opened media file.`
  @return "Video stream index."
  @return ? STREAM_NOT_FOUND
- @return ? DECODER_NOT_FOUND
 *>
 fn int? find_video_stream(AVFormatContext* fmt_ctx)
 {
-	// av_find_best_stream
-	return -1;
+	int ret = av_find_best_stream(fmt_ctx, AVMEDIA_TYPE_VIDEO, -1, -1, null, 0);
+	if (ret < 0) return STREAM_NOT_FOUND~;
+
+	return ret;
 }

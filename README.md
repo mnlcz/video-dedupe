@@ -26,11 +26,13 @@ Maybe also:
   - [ ] Make `is_video_file` ignore directories.
 - [ ] Decoder + sampler: extract frames at fixed intervals.
   - [x] Bindings for ffmpeg. (`src/core/decode/ffmpeg_bindings.c3`).
-  - [ ] Easy wrapper over bindings. (`src/core/decode/ffmpeg.c3`).
+    - [x] external functions.
+    - [x] partial structs.
+  - [x] Easy wrapper over bindings. (`src/core/decode/ffmpeg.c3`).
     - [x] `av_read_frame`.
     - [x] `av_frame_alloc`.
     - [x] `av_frame_free`.
-    - [ ] `av_find_best_stream`.
+    - [x] `av_find_best_stream`.
     - [x] `av_find_decoder`.
     - [x] `avcodec_alloc_context3`.
     - [x] `avcodec_parameters_to_context`.
