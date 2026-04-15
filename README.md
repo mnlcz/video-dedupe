@@ -41,5 +41,6 @@ Maybe also:
   - [x] Decoder api. (`src/core/decode/decoder.c3`).
   - [ ] Sampler
     - [ ] `AVFrame` partial.
-    - [ ] `Sampler` struct.
+    - [ ] `Frame` struct.
+    - [ ] Sample logic on `Frame`.
   - [x] Maybe make wrappers and bindings `@private`, making `decoder.c3` the only visible api.
