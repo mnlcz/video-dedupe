@@ -20,7 +20,7 @@ struct VideoDecoder
  @return ? NO_VIDEO_STREAM : "Unable to find video stream."
  @return ? DECODER_INIT_FAILED : "Unable to initialize the decoder."
 *>
-fn VideoDecoder*? open(VideoDecoder* this, String path)
+fn VideoDecoder*? open(String path)
 {
 	// open_input -> find_video_stream -> open_decoder -> packet_alloc -> frame_alloc
 	return null;
@@ -29,7 +29,7 @@ fn VideoDecoder*? open(VideoDecoder* this, String path)
 <*
  Frees the resources. The function cannot fail.
 *>
-fn void close(VideoDecoder* this)
+fn void VideoDecoder.close(VideoDecoder* this)
 {
 	// frame_free -> packer_free -> close_decoder -> close_input
 }
@@ -40,7 +40,7 @@ fn void close(VideoDecoder* this)
  @return ? STREAM_END : "Reached EOF."
  @return ? FRAME_DECODE_FAILED : "Unable to decode the frame."
 *>
-fn AVFrame*? get_frame(VideoDecoder* this)
+fn AVFrame*? VideoDecoder.next_frame(VideoDecoder* this)
 {
 	return null;
 }
