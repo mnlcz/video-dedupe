@@ -13,6 +13,7 @@ int main() {
   printf("\n");
   printf("size of AVStream:   %u\n", sizeof(AVStream));
   printf("offset codecpar: %u\n", offsetof(AVStream, codecpar));
+  printf("offset time_base: %u\n", offsetof(AVStream, time_base));
   printf("\n");
   printf("size of AVFrame: %u\n", sizeof(AVFrame));
   printf("offset of pts: %u\n", offsetof(AVFrame, pts));
