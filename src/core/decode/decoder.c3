@@ -1,4 +1,5 @@
 module video_dedupe::core::decode;
+import video_dedupe::core::frame;
 
 faultdef DECODER_INIT_FAILED, FILE_OPEN_FAILED, FRAME_DECODE_FAILED, NO_VIDEO_STREAM;
 
@@ -9,6 +10,7 @@ struct VideoDecoder
 	AVCodecContext* codec_ctx;
 	AVPacket* pkt;
 	AVFrame* frame;
+	Frame current_frame;
 	int video_stream_index;
 	bool eof;
 	bool flushed;
@@ -85,9 +87,7 @@ fn void VideoDecoder.close(VideoDecoder* this)
  @return ? STREAM_END : "Reached EOF."
  @return ? FRAME_DECODE_FAILED : "Unable to decode the frame."
 *>
-fn AVFrame*? VideoDecoder.get_frame(
-	VideoDecoder* this
-) // TODO: should return core::frame::Frame
+fn Frame*? VideoDecoder.get_frame(VideoDecoder* this)
 {
 	frame_unref(this.frame);
 
@@ -108,6 +108,10 @@ fn AVFrame*? VideoDecoder.get_frame(
 		return FRAME_DECODE_FAILED~;
 	}
 
-	// TODO: transformation AVFrame -> Frame should go here
-	return this.frame;
+	// AVFrame -> Frame
+	AVRational tb = this.fmt_ctx.streams[this.video_stream_index].time_base;
+	this.current_frame.timestamp = (double)this.frame.pts
+		* ((double)tb.num / (double)tb.den);
+
+	return &this.current_frame;
 }
