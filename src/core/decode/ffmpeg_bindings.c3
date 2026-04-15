@@ -3,8 +3,11 @@ module video_dedupe::core::decode @private;
 // ---- avutil types ----
 alias AVRational = void; // numerator/denominator fraction, used for timestamps
 alias AVDictionary = void;
-alias AVFrame = void; // a decoded frame
-
+struct AVFrame
+{
+	char[136] _padding;
+	long pts;
+}
 // avformat types
 struct AVStream
 {
