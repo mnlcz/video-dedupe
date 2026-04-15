@@ -77,11 +77,34 @@ fn void VideoDecoder.close(VideoDecoder* this)
 
 <*
  Retrieves the next frame.
+ NOTE:
+ - The returned frame is reused internally.
+ - Calling next_frame again invalidates the previous frame.
+ - Do NOT store the pointer long-term.
  @return "Decoded frame."
  @return ? STREAM_END : "Reached EOF."
  @return ? FRAME_DECODE_FAILED : "Unable to decode the frame."
 *>
-fn AVFrame*? VideoDecoder.next_frame(VideoDecoder* this)
+fn AVFrame*? VideoDecoder.get_frame(VideoDecoder* this)
 {
-	return null;
+	frame_unref(this.frame);
+
+	AVFrame*? maybe_frame = next_frame(
+		this.fmt_ctx,
+		this.codec_ctx,
+		this.pkt,
+		this.frame,
+		this.video_stream_index,
+		&this.eof,
+		&this.flushed
+	);
+
+	if (catch excuse = maybe_frame)
+	{
+		if (excuse == STREAM_END) return STREAM_END~;
+		if (excuse == DECODE_FAILED) return FRAME_DECODE_FAILED~;
+		return FRAME_DECODE_FAILED~;
+	}
+
+	return this.frame;
 }
