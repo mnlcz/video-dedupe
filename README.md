@@ -39,4 +39,4 @@ Maybe also:
     - [x] `avcodec_open2`.
     - [x] `avcodec_free_context`.
   - [ ] Decoder api. (`src/core/decode/decoder.c3`).
-  - [ ] Maybe make wrappers and bindings `@private`, making `decoder.c3` the only visible api.
+  - [x] Maybe make wrappers and bindings `@private`, making `decoder.c3` the only visible api.

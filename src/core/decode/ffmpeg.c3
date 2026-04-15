@@ -1,4 +1,4 @@
-module video_dedupe::core::decode;
+module video_dedupe::core::decode @private;
 
 faultdef ALLOC_FAILED, CODEC_NOT_FOUND, CODEC_OPEN_FAILED, CODEC_PARAMS_FAILED, DECODE_FAILED, OPEN_FAILED, STREAM_INFO_FAILED, STREAM_NOT_FOUND, STREAM_END;
 

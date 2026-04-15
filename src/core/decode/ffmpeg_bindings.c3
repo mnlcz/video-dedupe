@@ -1,4 +1,4 @@
-module video_dedupe::core::decode;
+module video_dedupe::core::decode @private;
 
 // ---- avutil types ----
 alias AVRational = void; // numerator/denominator fraction, used for timestamps
