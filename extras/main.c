@@ -1,5 +1,6 @@
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
+#include <libavutil/frame.h>
 #include <stddef.h>
 #include <stdio.h>
 
@@ -12,5 +13,8 @@ int main() {
   printf("\n");
   printf("size of AVStream:   %u\n", sizeof(AVStream));
   printf("offset codecpar: %u\n", offsetof(AVStream, codecpar));
+  printf("\n");
+  printf("size of AVFrame: %u\n", sizeof(AVFrame));
+  printf("offset of pts: %u\n", offsetof(AVFrame, pts));
   return 0;
 }
