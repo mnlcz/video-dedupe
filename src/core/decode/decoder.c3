@@ -4,6 +4,7 @@ faultdef DECODER_INIT_FAILED, FILE_OPEN_FAILED, FRAME_DECODE_FAILED, NO_VIDEO_ST
 
 struct VideoDecoder
 {
+	Allocator allocator;
 	AVFormatContext* fmt_ctx;
 	AVCodecContext* codec_ctx;
 	AVPacket* pkt;
@@ -50,6 +51,7 @@ fn VideoDecoder*? open(Allocator allocator, String path)
 	AVFrame* frame = maybe_frame;
 	defer catch frame_free(&frame);
 
+	vd.allocator = allocator;
 	vd.fmt_ctx = fmt_ctx;
 	vd.codec_ctx = codec_ctx;
 	vd.pkt = pkt;
@@ -66,7 +68,11 @@ fn VideoDecoder*? open(Allocator allocator, String path)
 *>
 fn void VideoDecoder.close(VideoDecoder* this)
 {
-	// frame_free -> packer_free -> close_decoder -> close_input
+	frame_free(&this.frame);
+	packet_free(&this.pkt);
+	close_decoder(&this.codec_ctx);
+	close_input(&this.fmt_ctx);
+	alloc::free(this.allocator, this);
 }
 
 <*
