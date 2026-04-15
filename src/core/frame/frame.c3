@@ -1,3 +1,6 @@
 module video_dedupe::core::frame;
 
-// struct Frame
+struct Frame
+{
+	double timestamp;
+}
