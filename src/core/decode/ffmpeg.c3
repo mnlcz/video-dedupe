@@ -18,14 +18,23 @@ fn AVFormatContext*? open_input(String path)
 {
 	AVFormatContext* ctx = null;
 
-	if (avformat_open_input(&ctx, path, null, null) < 0) return OPEN_FAILED~;
-	if (!ctx) return OPEN_FAILED~;
-
-	if (avformat_find_stream_info(ctx, null) < 0)
+	@pool()
 	{
-		avformat_close_input(&ctx);
-		return STREAM_INFO_FAILED~;
-	}
+		ZString cpath = path.zstr_tcopy();
+		if (avformat_open_input(
+			&ctx,
+			cpath,
+			null,
+			null
+		) < 0) return OPEN_FAILED~;
+		if (!ctx) return OPEN_FAILED~;
+
+		if (avformat_find_stream_info(ctx, null) < 0)
+		{
+			avformat_close_input(&ctx);
+			return STREAM_INFO_FAILED~;
+		}
+	};
 
 	return ctx;
 }
@@ -34,10 +43,10 @@ fn AVFormatContext*? open_input(String path)
  Closes the opened media source and frees the resources.
  @param ctx : `The context referring to the media to close.`
 *>
-fn void close_input(AVFormatContext* ctx)
+fn void close_input(AVFormatContext** ctx)
 {
 	if (!ctx) return;
-	avformat_close_input(&ctx);
+	avformat_close_input(ctx);
 }
 
 <*
@@ -48,6 +57,7 @@ fn void close_input(AVFormatContext* ctx)
  @param frame : `Decoded data container`
  @param video_stream_index : `Index of the stream to decode.`
  @param eof : `Internal state flag. Indicates package availability.`
+ @param flushed : `Internal state flag. Indicates if the decoder was flushed.`
  @return "Decoded frame."
  @return ? STREAM_END : "Reached EOF."
  @return ? DECODE_FAILED : "Either the package couldn't be sent or the frame couldn't be received."
@@ -58,44 +68,57 @@ fn AVFrame*? next_frame(
 	AVPacket* pkt,
 	AVFrame* frame,
 	int video_stream_index,
-	bool* eof
+	bool* eof,
+	bool* flushed
 )
 {
 	while (true)
 	{
 		int ret = avcodec_receive_frame(codec_ctx, frame);
-		if (ret == 0) return frame;
-		if (ret == AVERROR_EOF) return STREAM_END~;
+		if (ret == 0) return frame; // Got a frame
+		if (ret == AVERROR_EOF) return STREAM_END~; // Decoder fully drained
 		if (ret != AVERROR_EAGAIN) return DECODE_FAILED~;
 
-		if (*eof)
+		// --- read packets ---
+		if (!*eof)
 		{
-			// flush decoder
-			ret = avcodec_send_packet(codec_ctx, null);
-			if (ret < 0) return DECODE_FAILED~;
-			continue;
-		}
+			ret = av_read_frame(fmt_ctx, pkt);
 
-		ret = av_read_frame(fmt_ctx, pkt);
-		if (ret < 0)
-		{
-			*eof = true;
-			continue;
-		}
+			if (ret < 0)
+			{
+				*eof = true;
+				continue;
+			}
 
-		if (pkt.stream_index != video_stream_index)
-		{
+			if (pkt.stream_index != video_stream_index)
+			{
+				av_packet_unref(pkt);
+				continue;
+			}
+
+			ret = avcodec_send_packet(codec_ctx, pkt);
 			av_packet_unref(pkt);
+
+			// decoder full, continue to retry receive_frame
+			if (ret == AVERROR_EAGAIN) continue;
+
+			if (ret < 0) return DECODE_FAILED~;
+
 			continue;
 		}
 
-		ret = avcodec_send_packet(codec_ctx, pkt);
-		av_packet_unref(pkt);
+		// --- EOF but not flushed ---
+		if (!*flushed)
+		{
+			ret = avcodec_send_packet(codec_ctx, null);
 
-		// decoder full
-		if (ret == AVERROR_EAGAIN) continue;
+			if (ret < 0) return DECODE_FAILED~;
 
-		if (ret < 0) return DECODE_FAILED~;
+			*flushed = true;
+			continue;
+		}
+
+		return STREAM_END~;
 	}
 }
 
@@ -112,12 +135,21 @@ fn AVFrame*? frame_alloc()
 }
 
 <*
- Frees the resources used by the frame. The function is safe and cannot fail.
+ Frees the frame container. The function is safe and cannot fail and should be called at the end of the decoder lifecycle.
  @param frame : `Frame to free.`
 *>
-fn void frame_free(AVFrame* frame)
+fn void frame_free(AVFrame** frame)
 {
-	av_frame_free(&frame);
+	av_frame_free(frame);
+}
+
+<*
+ Clears frame data, releases internal buffers, but keeps the frame container allocated. The function should be called after each decoded frame.
+ @param frame : `Frame to clear.`
+*>
+fn void frame_unref(AVFrame* frame)
+{
+	av_frame_unref(frame);
 }
 
 <*
@@ -136,9 +168,9 @@ fn AVPacket*? packet_alloc()
  Frees the resources used by the packet. The function is safe and cannot fail.
  @param pkt : `Packet to free.`
 *>
-fn void packet_free(AVPacket* pkt)
+fn void packet_free(AVPacket** pkt)
 {
-	av_packet_free(&pkt);
+	av_packet_free(pkt);
 }
 
 <*
@@ -181,10 +213,10 @@ fn AVCodecContext*? open_decoder(
  Frees the resources associated with a codec context. The function cannot fail.
  @param codec_ctx : `Pointer to the codec context.`
 *>
-fn void close_decoder(AVCodecContext* codec_ctx)
+fn void close_decoder(AVCodecContext** codec_ctx)
 {
 	if (!codec_ctx) return;
-	avcodec_free_context(&codec_ctx);
+	avcodec_free_context(codec_ctx);
 }
 
 <*
