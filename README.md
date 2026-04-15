@@ -44,7 +44,7 @@ Maybe also:
     - [ ] `Frame` struct.
       - [x] Extend `AVStream` to expose `time_base`.
       - [x] Binding for `AVRational`.
-      - [ ] Implement `Frame`.
-      - [ ] Update `get_frame`.
+      - [x] Implement `Frame`.
+      - [x] Update `get_frame`.
     - [ ] Sample logic on `Frame`.
   - [x] Maybe make wrappers and bindings `@private`, making `decoder.c3` the only visible api.
