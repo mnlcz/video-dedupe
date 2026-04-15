@@ -20,10 +20,45 @@ struct VideoDecoder
  @return ? NO_VIDEO_STREAM : "Unable to find video stream."
  @return ? DECODER_INIT_FAILED : "Unable to initialize the decoder."
 *>
-fn VideoDecoder*? open(String path)
+fn VideoDecoder*? open(Allocator allocator, String path)
 {
 	// open_input -> find_video_stream -> open_decoder -> packet_alloc -> frame_alloc
-	return null;
+	VideoDecoder* vd = alloc::malloc(allocator, VideoDecoder.sizeof);
+	defer catch alloc::free(allocator, vd);
+
+	AVFormatContext*? maybe_fmt = open_input(path);
+	if (catch excuse = maybe_fmt) return FILE_OPEN_FAILED~;
+	AVFormatContext* fmt_ctx = maybe_fmt;
+	defer catch close_input(&fmt_ctx);
+
+	int? maybe_stream = find_video_stream(fmt_ctx);
+	if (catch excuse = maybe_stream) return NO_VIDEO_STREAM~;
+	int stream_index = maybe_stream;
+
+	AVCodecContext*? maybe_codec = open_decoder(fmt_ctx, stream_index);
+	if (catch excuse = maybe_codec) return DECODER_INIT_FAILED~;
+	AVCodecContext* codec_ctx = maybe_codec;
+	defer catch close_decoder(&codec_ctx);
+
+	AVPacket*? maybe_pkt = packet_alloc();
+	if (catch excuse = maybe_pkt) return DECODER_INIT_FAILED~;
+	AVPacket* pkt = maybe_pkt;
+	defer catch packet_free(&pkt);
+
+	AVFrame*? maybe_frame = frame_alloc();
+	if (catch excuse = maybe_frame) return DECODER_INIT_FAILED~;
+	AVFrame* frame = maybe_frame;
+	defer catch frame_free(&frame);
+
+	vd.fmt_ctx = fmt_ctx;
+	vd.codec_ctx = codec_ctx;
+	vd.pkt = pkt;
+	vd.frame = frame;
+	vd.video_stream_index = stream_index;
+	vd.eof = false;
+	vd.flushed = false;
+
+	return vd;
 }
 
 <*
