@@ -38,5 +38,8 @@ Maybe also:
     - [x] `avcodec_parameters_to_context`.
     - [x] `avcodec_open2`.
     - [x] `avcodec_free_context`.
-  - [ ] Decoder api. (`src/core/decode/decoder.c3`).
+  - [x] Decoder api. (`src/core/decode/decoder.c3`).
+  - [ ] Sampler
+    - [ ] `AVFrame` partial.
+    - [ ] `Sampler` struct.
   - [x] Maybe make wrappers and bindings `@private`, making `decoder.c3` the only visible api.
