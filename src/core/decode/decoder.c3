@@ -85,7 +85,9 @@ fn void VideoDecoder.close(VideoDecoder* this)
  @return ? STREAM_END : "Reached EOF."
  @return ? FRAME_DECODE_FAILED : "Unable to decode the frame."
 *>
-fn AVFrame*? VideoDecoder.get_frame(VideoDecoder* this)
+fn AVFrame*? VideoDecoder.get_frame(
+	VideoDecoder* this
+) // TODO: should return core::frame::Frame
 {
 	frame_unref(this.frame);
 
@@ -106,5 +108,6 @@ fn AVFrame*? VideoDecoder.get_frame(VideoDecoder* this)
 		return FRAME_DECODE_FAILED~;
 	}
 
+	// TODO: transformation AVFrame -> Frame should go here
 	return this.frame;
 }
