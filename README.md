@@ -42,8 +42,8 @@ Maybe also:
   - [ ] Sampler
     - [x] `AVFrame` partial.
     - [ ] `Frame` struct.
-      - [ ] Extend `AVStream` to expose `time_base`.
-      - [ ] Binding for `AVRational`.
+      - [x] Extend `AVStream` to expose `time_base`.
+      - [x] Binding for `AVRational`.
       - [ ] Implement `Frame`.
       - [ ] Update `get_frame`.
     - [ ] Sample logic on `Frame`.
