@@ -39,12 +39,13 @@ Maybe also:
     - [x] `avcodec_open2`.
     - [x] `avcodec_free_context`.
   - [x] Decoder api. (`src/core/decode/decoder.c3`).
-  - [ ] Sampler
+  - [x] Sampler
     - [x] `AVFrame` partial.
-    - [ ] `Frame` struct.
+    - [x] `Frame` struct.
       - [x] Extend `AVStream` to expose `time_base`.
       - [x] Binding for `AVRational`.
       - [x] Implement `Frame`.
       - [x] Update `get_frame`.
-    - [ ] Sample logic on `Frame`.
+    - [x] Sample logic on `Frame`.
   - [x] Maybe make wrappers and bindings `@private`, making `decoder.c3` the only visible api.
+  - [ ] Tests.
