@@ -56,3 +56,11 @@ Maybe also:
 - [x] Maybe make wrappers and bindings `@private`, making `decoder.c3` the only visible api.
 - [x] Tests.
 </details>
+
+<details>
+<summary>❌ Frame normalization: Turn frames into a consistent format, stabilize before hashing.</summary>
+
+- [ ] Add `libswscale` bindings.
+- [ ] Add pixel data to the `Frame` type.
+- [ ] Implement the normalization
+</details>

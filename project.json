@@ -21,7 +21,8 @@
   "linked-libraries": [
     "avformat",
     "avcodec",
-    "avutil"
+    "avutil",
+    "swscale"
   ],
   "targets": {
     "debug": {
