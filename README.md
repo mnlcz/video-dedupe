@@ -24,28 +24,31 @@ Maybe also:
   - [x] Move `args.c3` to a dedicated `cli/` directory.
   - [ ] Consider adding flags, current logic should go in something like `video_dedupe --scan <dirpath>`. But I could also allow `video_dedupe --compare <a> <b>`.
   - [ ] Make `is_video_file` ignore directories.
-- [ ] Decoder + sampler: extract frames at fixed intervals.
-  - [x] Bindings for ffmpeg. (`src/core/decode/ffmpeg_bindings.c3`).
-    - [x] external functions.
-    - [x] partial structs.
-  - [x] Easy wrapper over bindings. (`src/core/decode/ffmpeg.c3`).
-    - [x] `av_read_frame`.
-    - [x] `av_frame_alloc`.
-    - [x] `av_frame_free`.
-    - [x] `av_find_best_stream`.
-    - [x] `av_find_decoder`.
-    - [x] `avcodec_alloc_context3`.
-    - [x] `avcodec_parameters_to_context`.
-    - [x] `avcodec_open2`.
-    - [x] `avcodec_free_context`.
-  - [x] Decoder api. (`src/core/decode/decoder.c3`).
-  - [x] Sampler
-    - [x] `AVFrame` partial.
-    - [x] `Frame` struct.
-      - [x] Extend `AVStream` to expose `time_base`.
-      - [x] Binding for `AVRational`.
-      - [x] Implement `Frame`.
-      - [x] Update `get_frame`.
-    - [x] Sample logic on `Frame`.
-  - [x] Maybe make wrappers and bindings `@private`, making `decoder.c3` the only visible api.
-  - [ ] Tests.
+
+<details>
+<summary>[✅] Decoder + sampler: extract frames at fixed intervals.</summary>
+- [x] Bindings for ffmpeg. (`src/core/decode/ffmpeg_bindings.c3`).
+  - [x] external functions.
+  - [x] partial structs.
+- [x] Easy wrapper over bindings. (`src/core/decode/ffmpeg.c3`).
+  - [x] `av_read_frame`.
+  - [x] `av_frame_alloc`.
+  - [x] `av_frame_free`.
+  - [x] `av_find_best_stream`.
+  - [x] `av_find_decoder`.
+  - [x] `avcodec_alloc_context3`.
+  - [x] `avcodec_parameters_to_context`.
+  - [x] `avcodec_open2`.
+  - [x] `avcodec_free_context`.
+- [x] Decoder api. (`src/core/decode/decoder.c3`).
+- [x] Sampler
+  - [x] `AVFrame` partial.
+  - [x] `Frame` struct.
+    - [x] Extend `AVStream` to expose `time_base`.
+    - [x] Binding for `AVRational`.
+    - [x] Implement `Frame`.
+    - [x] Update `get_frame`.
+  - [x] Sample logic on `Frame`.
+- [x] Maybe make wrappers and bindings `@private`, making `decoder.c3` the only visible api.
+- [x] Tests.
+</details>
