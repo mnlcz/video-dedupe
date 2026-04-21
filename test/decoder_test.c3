@@ -3,7 +3,6 @@ module video_dedupe::tests::decode;
 import video_dedupe::core::decode;
 import video_dedupe::core::frame;
 import std::core::test;
-import std::io::path;
 
 // --- open video ---
 
