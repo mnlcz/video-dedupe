@@ -9,7 +9,14 @@ struct AVRational
 alias AVDictionary = void;
 struct AVFrame
 {
-	char[136] _padding;
+	char*[8] data;
+	int[8] linesize;
+	char[8] _pad1;
+	int width;
+	int height;
+	char[4] _pad2;
+	int format;
+	char[16] _pad3;
 	long pts;
 }
 // avformat types
@@ -51,6 +58,11 @@ struct AVCodecParameters
 	int codec_type;
 	int codec_id;
 }
+
+// swscale types
+alias SwsContext = void;
+const int AV_PIX_FMT_GRAY8 = 8;
+const int AV_PIX_FMT_YUV420P = 0;
 
 // avformat functions
 extern fn int avformat_open_input(
@@ -94,3 +106,27 @@ extern fn void av_packet_unref(AVPacket* pkt);
 extern fn AVFrame* av_frame_alloc();
 extern fn void av_frame_free(AVFrame** frame);
 extern fn void av_frame_unref(AVFrame* frame);
+
+// svscale funcs
+extern fn SwsContext* sws_getContext(
+	int srcW,
+	int srcH,
+	int srcFormat,
+	int dstW,
+	int dstH,
+	int dstFormat,
+	int flags,
+	void* srcFilter,
+	void* dstFilter,
+	double* param
+);
+extern fn int sws_scale(
+	SwsContext* c,
+	char** srcSlice,
+	int* srcStride,
+	int srcSliceY,
+	int srcSliceH,
+	char** dst,
+	int* dstStride
+);
+extern fn void sws_freeContext(SwsContext* swsContext);
