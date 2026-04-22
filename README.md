@@ -69,5 +69,6 @@ Maybe also:
   - [x] `AV_PIX_FMT_YUV420P`.
   - [x] `AV_PIX_FMT_GRAY8`.
 - [x] Add pixel data to the `Frame` type.
-- [ ] Implement the normalization
+- [x] Implement the normalization
+- [ ] Test.
 </details>

@@ -8,6 +8,7 @@ struct VideoDecoder
 	Allocator allocator;
 	AVFormatContext* fmt_ctx;
 	AVCodecContext* codec_ctx;
+	SwsContext* sws_ctx;
 	AVPacket* pkt;
 	AVFrame* frame;
 	Frame current_frame;
@@ -56,6 +57,7 @@ fn VideoDecoder*? open(Allocator allocator, String path)
 	vd.allocator = allocator;
 	vd.fmt_ctx = fmt_ctx;
 	vd.codec_ctx = codec_ctx;
+	vd.sws_ctx = null;
 	vd.pkt = pkt;
 	vd.frame = frame;
 	vd.video_stream_index = stream_index;
@@ -70,6 +72,7 @@ fn VideoDecoder*? open(Allocator allocator, String path)
 *>
 fn void VideoDecoder.close(VideoDecoder* this)
 {
+	swscontext_free(this.sws_ctx);
 	frame_free(&this.frame);
 	packet_free(&this.pkt);
 	close_decoder(&this.codec_ctx);
@@ -108,10 +111,43 @@ fn Frame*? VideoDecoder.get_frame(VideoDecoder* this)
 		return FRAME_DECODE_FAILED~;
 	}
 
+	AVFrame* frame = maybe_frame;
+
+	if (!this.sws_ctx)
+	{
+		this.sws_ctx = sws_getContext(
+			this.frame.width,
+			this.frame.height,
+			frame.format,
+			frame::NORMALIZED_WIDTH,
+			frame::NORMALIZED_HEIGHT,
+			decode::AV_PIX_FMT_GRAY8,
+			decode::SWS_BILINEAR,
+			null,
+			null,
+			null
+		);
+		if (!this.sws_ctx) return FRAME_DECODE_FAILED~;
+	}
+
+	char*[1] dst_data = { &this.current_frame.pixels[0] };
+	int[1] dst_stride = { frame::NORMALIZED_WIDTH };
+	sws_scale(
+		this.sws_ctx,
+		&frame.data[0],
+		&frame.linesize[0],
+		0,
+		frame.height,
+		&dst_data[0],
+		&dst_stride[0]
+	);
+
 	// AVFrame -> Frame
 	AVRational tb = this.fmt_ctx.streams[this.video_stream_index].time_base;
 	this.current_frame.timestamp = (double)this.frame.pts
 		* ((double)tb.num / (double)tb.den);
+	this.current_frame.width = frame::NORMALIZED_WIDTH;
+	this.current_frame.height = frame::NORMALIZED_HEIGHT;
 
 	return &this.current_frame;
 }
