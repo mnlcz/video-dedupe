@@ -2,10 +2,13 @@ module video_dedupe::core::decode @private;
 
 faultdef ALLOC_FAILED, CODEC_NOT_FOUND, CODEC_OPEN_FAILED, CODEC_PARAMS_FAILED, DECODE_FAILED, OPEN_FAILED, STREAM_INFO_FAILED, STREAM_NOT_FOUND, STREAM_END @public;
 
-const int AVMEDIA_TYPE_VIDEO = 0;
-const int AVMEDIA_TYPE_AUDIO = 1;
 const int AVERROR_EAGAIN = -11;
 const int AVERROR_EOF = -541478725; // ffmpeg specific
+const int AVMEDIA_TYPE_AUDIO = 1;
+const int AVMEDIA_TYPE_VIDEO = 0;
+const int AV_PIX_FMT_GRAY8 = 8;
+const int AV_PIX_FMT_YUV420P = 0;
+const int SWS_BILINEAR = 2;
 
 <*
  Opens a media source and initializes an `AVFormatContext` for reading.

@@ -61,9 +61,6 @@ struct AVCodecParameters
 
 // swscale types
 alias SwsContext = void;
-const int AV_PIX_FMT_GRAY8 = 8;
-const int AV_PIX_FMT_YUV420P = 0;
-const int SWS_BILINEAR = 2;
 
 // avformat functions
 extern fn int avformat_open_input(
