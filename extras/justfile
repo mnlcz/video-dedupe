@@ -2,7 +2,7 @@ flags := `pkg-config --cflags libavcodec`
 
 [default]
 build:
-    cc main.c -o sizes {{flags}}
+    cc ccheck.c -o sizes {{flags}}
 
 clean:
     rm ./sizes

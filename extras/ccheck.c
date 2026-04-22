@@ -16,6 +16,11 @@ int main() {
   printf("offset time_base: %u\n", offsetof(AVStream, time_base));
   printf("\n");
   printf("size of AVFrame: %u\n", sizeof(AVFrame));
+  printf("offset data: %u\n", offsetof(AVFrame, data));
+  printf("offset linesize: %u\n", offsetof(AVFrame, linesize));
+  printf("offset width: %u\n", offsetof(AVFrame, width));
+  printf("offset height: %u\n", offsetof(AVFrame, height));
+  printf("offset format: %u\n", offsetof(AVFrame, format));
   printf("offset of pts: %u\n", offsetof(AVFrame, pts));
   return 0;
 }

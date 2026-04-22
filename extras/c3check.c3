@@ -22,22 +22,31 @@ struct AVRational
 }
 struct AVFrame
 {
-	char[136] _padding;
+	char*[8] data;
+	int[8] linesize;
+	char[8] _pad1;
+	int width;
+	int height;
+	char[4] _pad2;
+	int format;
+	char[16] _pad3;
 	long pts;
 }
 
 fn int main(String[] args)
 {
 	AVStream strm;
-	uint codecpar = $offsetof ( strm.codecpar );
-	uint time_base = $offsetof ( strm.time_base );
 	io::printfn("size of AVStream: %d", $sizeof (AVStream));
-	io::printfn("offset for codecpar: %d", codecpar);
-	io::printfn("offset for time_base: %d", time_base);
+	io::printfn("offset for codecpar: %d", $offsetof ( strm.codecpar ));
+	io::printfn("offset for time_base: %d", $offsetof ( strm.time_base ));
 	io::printn();
 	AVFrame frm;
-	uint pts = $offsetof ( frm.pts );
 	io::printfn("size of AVFrame: %d", AVFrame.sizeof);
-	io::printfn("offset for pts: %d", pts);
+	io::printfn("offset data: %d", $offsetof ( frm.data ));
+	io::printfn("offset linesize: %d", $offsetof ( frm.linesize ));
+	io::printfn("offset width: %d", $offsetof ( frm.width ));
+	io::printfn("offset height: %d", $offsetof ( frm.height ));
+	io::printfn("offset format: %d", $offsetof ( frm.format ));
+	io::printfn("offset for pts: %d", $offsetof ( frm.pts ));
 	return 0;
 }
