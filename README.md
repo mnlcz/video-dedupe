@@ -68,6 +68,6 @@ Maybe also:
   - [x] `sws_freeContext`.
   - [x] `AV_PIX_FMT_YUV420P`.
   - [x] `AV_PIX_FMT_GRAY8`.
-- [ ] Add pixel data to the `Frame` type.
+- [x] Add pixel data to the `Frame` type.
 - [ ] Implement the normalization
 </details>
