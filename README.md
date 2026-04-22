@@ -60,14 +60,14 @@ Maybe also:
 <details>
 <summary>❌ Frame normalization: Turn frames into a consistent format, stabilize before hashing.</summary>
 
-- [ ] Add `libswscale` bindings, structs and constants.
-  - [ ] Extend `AVFrame` to expose `format`, `width` and `height` for `sws_getContext`.
-  - [ ] `SwsContext`.
-  - [ ] `sws_getContext`.
-  - [ ] `sws_scale`.
-  - [ ] `sws_freeContext`.
-  - [ ] `AV_PIX_FMT_YUV420P`.
-  - [ ] `AV_PIX_FMT_GRAY8`.
+- [x] Add `libswscale` bindings, structs and constants.
+  - [x] Extend `AVFrame` to expose `format`, `width` and `height` for `sws_getContext`.
+  - [x] `SwsContext`.
+  - [x] `sws_getContext`.
+  - [x] `sws_scale`.
+  - [x] `sws_freeContext`.
+  - [x] `AV_PIX_FMT_YUV420P`.
+  - [x] `AV_PIX_FMT_GRAY8`.
 - [ ] Add pixel data to the `Frame` type.
 - [ ] Implement the normalization
 </details>
