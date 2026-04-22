@@ -232,3 +232,13 @@ fn int? find_video_stream(AVFormatContext* fmt_ctx)
 
 	return ret;
 }
+
+<*
+ Cleans up the sws context.
+ @param ctx : `Pointer to the context to free.`
+*>
+fn void swscontext_free(SwsContext* ctx)
+{
+	if (!ctx) return;
+	sws_freeContext(ctx);
+}
