@@ -58,7 +58,7 @@ Maybe also:
 </details>
 
 <details>
-<summary>❌ Frame normalization: Turn frames into a consistent format, stabilize before hashing.</summary>
+<summary>✅ Frame normalization: Turn frames into a consistent format, stabilize before hashing.</summary>
 
 - [x] Add `libswscale` bindings, structs and constants.
   - [x] Extend `AVFrame` to expose `format`, `width` and `height` for `sws_getContext`.
@@ -71,4 +71,18 @@ Maybe also:
 - [x] Add pixel data to the `Frame` type.
 - [x] Implement the normalization
 - [x] Test.
+</details>
+
+<details>
+<summary>❌ Hashing: frames into a compact representation. Have a video fingerprint generator.</summary>
+
+- [ ] Module structure.
+- [ ] Frame hashing.
+  - [ ] Implement dHash algorithm on a single `Frame`.
+  - [ ] Write tests.
+- [ ] Fingerprint generation. `Frame[]` to fingerprint
+  - [ ] Define what it is.
+  - [ ] Implement generator.
+  - [ ] Add timestamp to each hash so that information is available later during the comparison.
+  - [ ] Write tests.
 </details>
