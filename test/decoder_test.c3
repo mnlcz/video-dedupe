@@ -58,6 +58,19 @@ fn void test_get_frame_returns_valid_frame() @test => @pool()
 	}
 	Frame* frame = maybe_frame;
 	test::@check(frame.timestamp >= 0.0, "First frame timestamp is negative.");
+	test::@check(frame.width == frame::NORMALIZED_WIDTH, "Wrong width.");
+	test::@check(frame.height == frame::NORMALIZED_HEIGHT, "Wrong height.");
+
+	bool all_zero = true;
+	for (int i = 0; i < frame::PIXEL_BUFFER_SIZE; i++)
+	{
+		if (frame.pixels[i] != 0)
+		{
+			all_zero = false;
+			break;
+		}
+	}
+	test::@check(!all_zero, "Pixel buffer is all zeros.");
 }
 
 fn void test_get_frame_monotonic_timestamps() @test => @pool()
